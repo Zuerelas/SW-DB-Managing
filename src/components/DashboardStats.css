@@ -1,0 +1,129 @@
+.dashboard-stats {
+  color: #fff;
+}
+
+.dashboard-stats h1 {
+  color: #ff5252;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  color: #ff8080;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.stat-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-detail:last-child {
+  border-bottom: none;
+}
+
+.next-event .stat-value {
+  font-size: 2rem;
+}
+
+.status-open {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.status-closed {
+  color: #e74c3c;
+}
+
+.recent-section {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recent-section h3 {
+  color: #ff8080;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.recent-photos {
+  overflow-x: auto;
+}
+
+.recent-photos table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recent-photos th,
+.recent-photos td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recent-photos th {
+  background: rgba(0, 0, 0, 0.3);
+  color: #ff8080;
+}
+
+.recent-photos tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.loading, .error-message, .no-data {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.error-message {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}

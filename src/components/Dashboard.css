@@ -1,0 +1,129 @@
+.dashboard-container {
+  color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-header h1 {
+  color: #ff5252;
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.logout-button {
+  background: linear-gradient(145deg, #e03131, #b63e3e);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(224, 49, 49, 0.4);
+}
+
+.tabs-container {
+  background: linear-gradient(145deg, #3d2424, #2b1919);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tabs-navigation {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  color: #ccc;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-button.active {
+  color: #ff5252;
+  border-bottom: 2px solid #ff5252;
+  background: rgba(255, 82, 82, 0.05);
+}
+
+.tab-content {
+  min-height: 400px;
+}
+
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  text-align: center;
+}
+
+.coming-soon h2 {
+  color: #ff8080;
+  margin-bottom: 1rem;
+}
+
+.coming-soon p {
+  color: #ccc;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .user-info {
+    align-items: flex-start;
+  }
+  
+  .tabs-navigation {
+    padding-bottom: 0.25rem;
+  }
+  
+  .tab-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}

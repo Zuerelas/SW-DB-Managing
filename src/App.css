@@ -1,13 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+:root {
+  font-family: 'Montserrat', sans-serif;
+}
+
 #root {
   width: 100%;
   margin: 0 auto;
   text-align: center;
+  background: linear-gradient(135deg, #451313, #691b1b, #681212);
+  background-size: 400% 400%;
+  animation: gradientAnimation 4s ease infinite;
 }
 
 .app-container {
@@ -38,6 +47,7 @@ button {
   cursor: pointer;
   transition: all 0.3s;
   font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
 }
 
 button:hover {

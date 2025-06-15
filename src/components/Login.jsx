@@ -11,7 +11,7 @@ function Login({ onLogin }) {
     e.preventDefault();
     
     if (!username || !password) {
-      setError('Please enter both username and password');
+      setError('Bitte geben Sie Benutzername und Passwort ein.');
       return;
     }
     
@@ -19,8 +19,7 @@ function Login({ onLogin }) {
     setError(null);
     
     try {
-      // First test endpoint connectivity
-      console.log('Testing API connectivity...');
+      // Zuerst die API-Konnektivität testen
       try {
         const testResponse = await fetch('https://suitwalk-linz-backend.vercel.app/api/test-endpoint');
         if (!testResponse.ok) {
@@ -30,7 +29,7 @@ function Login({ onLogin }) {
         console.error('Test endpoint failed:', testErr);
       }
       
-      // Now attempt the login
+      // Jetzt Login versuchen
       const response = await fetch('https://suitwalk-linz-backend.vercel.app/api/admin/login', {
         method: 'POST',
         headers: {
@@ -44,23 +43,17 @@ function Login({ onLogin }) {
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Login failed');
+        throw new Error(errorData.error || 'Anmeldung fehlgeschlagen');
       }
       
       const data = await response.json();
       
-      // Check if we have the token
+      // Prüfen, ob wir den Token haben
       if (!data.token) {
-        throw new Error('Authentication failed - no token received');
+        throw new Error('Authentifizierung fehlgeschlagen - kein Token erhalten');
       }
       
-      // Save user data and token
-      localStorage.setItem('user', JSON.stringify({
-        username: data.user.username,
-        token: data.token
-      }));
-      
-      // Call the onLogin callback
+      // onLogin-Callback aufrufen
       onLogin({
         username: data.user.username,
         token: data.token
@@ -68,16 +61,17 @@ function Login({ onLogin }) {
       
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.message || 'Login failed. Please check your credentials.');
+      setError(err.message || 'Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="admin-login-container">
-      <div className="admin-login-card">
-        <h1>Datenbank Login</h1>
+    <div className="login-container">
+      <div className="container-content login-card">
+        <h1>Suitwalk Linz</h1>
+        <h2>Datenbank-Verwaltung</h2>
         
         {error && (
           <div className="error-message">
@@ -85,7 +79,7 @@ function Login({ onLogin }) {
           </div>
         )}
         
-        <form onSubmit={handleSubmit} className="admin-login-form">
+        <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="username">Benutzername</label>
             <input
@@ -116,7 +110,7 @@ function Login({ onLogin }) {
             className="login-button"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Anmeldung läuft...' : 'Anmelden'}
           </button>
         </form>
       </div>

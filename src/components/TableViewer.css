@@ -1,0 +1,156 @@
+.table-viewer {
+  background: linear-gradient(145deg, #3d2424, #2b1919);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-viewer h2 {
+  color: #ff8080;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  position: relative;
+  display: inline-block;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-input {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-size: 1rem;
+  min-width: 250px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #e03131;
+  box-shadow: 0 0 0 2px rgba(224, 49, 49, 0.3);
+}
+
+.search-button,
+.clear-button {
+  padding: 0.8rem 1.2rem;
+  font-size: 0.9rem;
+}
+
+.clear-button {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clear-button:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.data-table th {
+  background: rgba(0, 0, 0, 0.3);
+  color: #ff8080;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+.data-table tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.data-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.pagination-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  color: #ddd;
+}
+
+.loading-message,
+.error-message,
+.no-data-message {
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.loading-message {
+  background: rgba(0, 0, 0, 0.2);
+  color: #ddd;
+}
+
+.error-message {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+}
+
+.no-data-message {
+  background: rgba(0, 0, 0, 0.2);
+  color: #ddd;
+}
+
+.back-button {
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-button:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
