@@ -437,7 +437,7 @@ function UsersTable({ token }) {
                       <span className={`user-type-badge ${user.type ? user.type.toLowerCase() : 'unknown'}`}>
                         {user.type === 'Sanitaeter' ? 'Sanitäter' : user.type}
                       </span>
-                      {user.badge && <span className="badge-icon-mobile">🏷️</span>}
+                      {user.badge == 1 && <span className="badge-icon-mobile">🏷️</span>}
                     </div>
                     
                     <div className="user-card-content">
