@@ -11,6 +11,9 @@ function UsersTable({ token }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleteStatus, setDeleteStatus] = useState(null);
+  // Spaltenauswahl State
+  const [visibleColumns, setVisibleColumns] = useState([]);
+  const [allColumns, setAllColumns] = useState([]);
   const [newUser, setNewUser] = useState({
     first_name: '',
     last_name: '',
@@ -61,6 +64,16 @@ function UsersTable({ token }) {
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  // Spalten initialisieren wenn Benutzer geladen werden
+  useEffect(() => {
+    if (users.length > 0) {
+      const keys = Object.keys(users[0]);
+      setAllColumns(keys);
+      // Nur beim ersten Laden initialisieren
+      setVisibleColumns((prev) => prev.length === 0 ? keys : prev);
+    }
+  }, [users]);
 
   // Generiert Beispieldaten
   const generateDemoUsers = () => {
@@ -238,6 +251,113 @@ function UsersTable({ token }) {
     setCardView(!cardView);
   };
 
+  // Spaltenauswahl-Handler
+  const handleColumnToggle = (col) => {
+    setVisibleColumns((prev) =>
+      prev.includes(col)
+        ? prev.filter((c) => c !== col)
+        : [...prev, col]
+    );
+  };
+
+  const renderColumnSelector = () => {
+    if (allColumns.length === 0 || cardView) return null;
+    return (
+      <div className="column-selector">
+        <span style={{ fontWeight: 500, color: '#ff8080' }}>Spalten anzeigen:</span>
+        {allColumns.map((col) => (
+          <label key={col}>
+            <input
+              type="checkbox"
+              checked={visibleColumns.includes(col)}
+              onChange={() => handleColumnToggle(col)}
+            />
+            {col}
+          </label>
+        ))}
+        <button
+          type="button"
+          className="column-selector-button"
+          onClick={() => setVisibleColumns(allColumns)}
+        >
+          Alle anzeigen
+        </button>
+        <button
+          type="button"
+          className="column-selector-button"
+          onClick={() => setVisibleColumns([])}
+        >
+          Alle ausblenden
+        </button>
+      </div>
+    );
+  };
+
+  const renderTableHeaders = () => {
+    return (
+      <tr>
+        {visibleColumns.map((col) => (
+          <th
+            key={col}
+            onClick={() => handleSort(col)}
+            className={sortField === col ? sortDirection : ''}
+          >
+            {col === 'telegram_id' ? 'Telegram ID' :
+             col === 'first_name' ? 'Vorname' :
+             col === 'last_name' ? 'Nachname' :
+             col === 'username' ? 'Benutzername' :
+             col === 'type' ? 'Typ' :
+             col === 'badge' ? 'Badge' :
+             col === 'created_at' ? 'Erstellt' :
+             col === 'auth_date' ? 'Auth Datum' :
+             col}
+            {sortField === col && (
+              <span className="sort-arrow">
+                {sortDirection === 'asc' ? '↑' : '↓'}
+              </span>
+            )}
+          </th>
+        ))}
+        <th>Aktionen</th>
+      </tr>
+    );
+  };
+
+  const renderTableRows = () => {
+    return filteredAndSortedUsers.map((user) => (
+      <tr key={user.id || user.telegram_id} className={`user-type-${user.type ? user.type.toLowerCase() : 'unknown'}`}>
+        {visibleColumns.map((col) => (
+          <td key={col}>
+            {col === 'type' ? (
+              <span className={`user-type-badge ${user.type ? user.type.toLowerCase() : 'unknown'}`}>
+                {user.type === 'Sanitaeter' ? 'Sanitäter' : user.type}
+              </span>
+            ) : col === 'badge' ? (
+              user.badge == 1 ? (
+                <span className="badge-icon">✓</span>
+              ) : (
+                <span className="no-badge-icon">✗</span>
+              )
+            ) : col === 'created_at' || col === 'auth_date' ? (
+              formatDate(user[col])
+            ) : (
+              user[col] || '-'
+            )}
+          </td>
+        ))}
+        <td>
+          <button
+            className="delete-user-button"
+            title="Benutzer löschen"
+            onClick={() => confirmDeleteUser(user)}
+          >
+            🗑️
+          </button>
+        </td>
+      </tr>
+    ));
+  };
+
   return (
     <div className="users-table-container">
       <div className="table-header">
@@ -410,6 +530,9 @@ function UsersTable({ token }) {
         </div>
       )}
 
+      {/* Spaltenauswahl nur in der Tabellenansicht */}
+      {!loading && !error && users.length > 0 && renderColumnSelector()}
+
       {loading ? (
         <div className="loading-message">Benutzer werden geladen...</div>
       ) : error ? (
@@ -474,66 +597,14 @@ function UsersTable({ token }) {
             <div className="table-wrapper">
               <table className="users-table">
                 <thead>
-                  <tr>
-                    <th onClick={() => handleSort('telegram_id')} className={sortField === 'telegram_id' ? sortDirection : ''}>
-                      Telegram ID {sortField === 'telegram_id' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th onClick={() => handleSort('first_name')} className={sortField === 'first_name' ? sortDirection : ''}>
-                      Vorname {sortField === 'first_name' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th onClick={() => handleSort('last_name')} className={sortField === 'last_name' ? sortDirection : ''}>
-                      Nachname {sortField === 'last_name' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th onClick={() => handleSort('username')} className={sortField === 'username' ? sortDirection : ''}>
-                      Benutzername {sortField === 'username' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th onClick={() => handleSort('type')} className={sortField === 'type' ? sortDirection : ''}>
-                      Typ {sortField === 'type' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th onClick={() => handleSort('badge')} className={sortField === 'badge' ? sortDirection : ''}>
-                      Badge {sortField === 'badge' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th onClick={() => handleSort('created_at')} className={sortField === 'created_at' ? sortDirection : ''}>
-                      Erstellt {sortField === 'created_at' && <span className="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>}
-                    </th>
-                    <th>Aktionen</th>
-                  </tr>
+                  {renderTableHeaders()}
                 </thead>
                 <tbody>
                   {filteredAndSortedUsers.length > 0 ? (
-                    filteredAndSortedUsers.map((user) => (
-                      <tr key={user.id || user.telegram_id} className={`user-type-${user.type ? user.type.toLowerCase() : 'unknown'}`}>
-                        <td>{user.telegram_id}</td>
-                        <td>{user.first_name}</td>
-                        <td>{user.last_name || '-'}</td>
-                        <td>{user.username || '-'}</td>
-                        <td>
-                          <span className={`user-type-badge ${user.type ? user.type.toLowerCase() : 'unknown'}`}>
-                            {user.type === 'Sanitaeter' ? 'Sanitäter' : user.type}
-                          </span>
-                        </td>
-                        <td>
-                          {user.badge == 1 ? (
-                            <span className="badge-icon">✓</span>
-                          ) : (
-                            <span className="no-badge-icon">✗</span>
-                          )}
-                        </td>
-                        <td>{formatDate(user.created_at)}</td>
-                        <td>
-                          <button 
-                            className="delete-user-button" 
-                            title="Benutzer löschen"
-                            onClick={() => confirmDeleteUser(user)}
-                          >
-                            🗑️
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                    renderTableRows()
                   ) : (
                     <tr>
-                      <td colSpan="9" className="no-data">Keine Benutzer gefunden</td>
+                      <td colSpan={visibleColumns.length + 1} className="no-data">Keine Benutzer gefunden</td>
                     </tr>
                   )}
                 </tbody>
@@ -547,3 +618,4 @@ function UsersTable({ token }) {
 }
 
 export default UsersTable;
+

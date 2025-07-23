@@ -9,7 +9,9 @@ function TableViewer({ database, table, token }) {
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState({});
-  
+  const [visibleColumns, setVisibleColumns] = useState([]);
+  const [allColumns, setAllColumns] = useState([]);
+
   const itemsPerPage = 10;
 
   const fetchData = React.useCallback(async () => {
@@ -17,33 +19,33 @@ function TableViewer({ database, table, token }) {
     setError(null);
 
     try {
-      // Hier würden wir den tatsächlichen API-Endpunkt verwenden
       const endpoint = `https://suitwalk-linz-backend.vercel.app/api/admin/${database}/${table}`;
-      
       const queryParams = new URLSearchParams({
         page: currentPage,
         limit: itemsPerPage,
         ...filter
       });
-      
       if (searchTerm) {
         queryParams.append('search', searchTerm);
       }
-
       const response = await fetch(`${endpoint}?${queryParams}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
       if (!response.ok) {
         throw new Error(`Fehler beim Laden der Daten: ${response.statusText}`);
       }
-
       const result = await response.json();
-      
       setData(result.data || []);
       setTotalPages(Math.ceil((result.total || result.data.length) / itemsPerPage));
+      // Spalten initialisieren, falls noch nicht gesetzt
+      if ((result.data || []).length > 0) {
+        const keys = Object.keys(result.data[0]);
+        setAllColumns(keys);
+        // Nur beim ersten Laden initialisieren
+        setVisibleColumns((prev) => prev.length === 0 ? keys : prev);
+      }
     } catch (err) {
       console.error('Fehler beim Laden der Tabellendaten:', err);
       setError(`Fehler beim Laden der Daten: ${err.message}`);
@@ -68,12 +70,54 @@ function TableViewer({ database, table, token }) {
     setCurrentPage(1);
   };
 
+  // Spaltenauswahl-Handler
+  const handleColumnToggle = (col) => {
+    setVisibleColumns((prev) =>
+      prev.includes(col)
+        ? prev.filter((c) => c !== col)
+        : [...prev, col]
+    );
+  };
+
+  const renderColumnSelector = () => {
+    if (allColumns.length === 0) return null;
+    return (
+      <div className="column-selector" style={{ marginBottom: '1rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+        <span style={{ fontWeight: 500, color: '#ff8080' }}>Spalten anzeigen:</span>
+        {allColumns.map((col) => (
+          <label key={col} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.95rem', color: '#eee' }}>
+            <input
+              type="checkbox"
+              checked={visibleColumns.includes(col)}
+              onChange={() => handleColumnToggle(col)}
+              style={{ accentColor: '#ff5252' }}
+            />
+            {col}
+          </label>
+        ))}
+        <button
+          type="button"
+          style={{ marginLeft: '1rem', fontSize: '0.9rem', padding: '0.3rem 1rem', borderRadius: 6, border: 'none', background: '#2b1919', color: '#ff8080', cursor: 'pointer' }}
+          onClick={() => setVisibleColumns(allColumns)}
+        >
+          Alle anzeigen
+        </button>
+        <button
+          type="button"
+          style={{ fontSize: '0.9rem', padding: '0.3rem 1rem', borderRadius: 6, border: 'none', background: '#2b1919', color: '#ff8080', cursor: 'pointer' }}
+          onClick={() => setVisibleColumns([])}
+        >
+          Alle ausblenden
+        </button>
+      </div>
+    );
+  };
+
   const renderTableHeaders = () => {
     if (data.length === 0) return null;
-    
     return (
       <tr>
-        {Object.keys(data[0]).map(key => (
+        {visibleColumns.map(key => (
           <th key={key}>{key}</th>
         ))}
       </tr>
@@ -83,9 +127,9 @@ function TableViewer({ database, table, token }) {
   const renderTableRows = () => {
     return data.map((row, index) => (
       <tr key={index}>
-        {Object.values(row).map((value, i) => (
+        {visibleColumns.map((col, i) => (
           <td key={i}>
-            {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+            {typeof row[col] === 'object' ? JSON.stringify(row[col]) : String(row[col])}
           </td>
         ))}
       </tr>
@@ -112,7 +156,10 @@ function TableViewer({ database, table, token }) {
           Filter zurücksetzen
         </button>
       </div>
-      
+
+      {/* Spaltenauswahl */}
+      {!loading && !error && data.length > 0 && renderColumnSelector()}
+
       {loading ? (
         <div className="loading-message">Daten werden geladen...</div>
       ) : error ? (

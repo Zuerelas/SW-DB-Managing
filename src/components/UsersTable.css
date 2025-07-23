@@ -607,6 +607,49 @@
   width: 100%;
 }
 
+/* Spaltenauswahl für UsersTable */
+.column-selector {
+  background: rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.column-selector label {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  fontSize: 0.95rem;
+  color: #eee;
+}
+
+.column-selector input[type="checkbox"] {
+  margin-right: 0.3rem;
+  accent-color: #ff5252;
+}
+
+.column-selector-button {
+  margin-left: 1rem;
+  fontSize: 0.9rem;
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background: #2b1919;
+  color: #ff8080;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.column-selector-button:hover {
+  background: #3d2424;
+}
+
 /* Responsive Improvements */
 @media (max-width: 768px) {
   .table-header {

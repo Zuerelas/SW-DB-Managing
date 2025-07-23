@@ -154,3 +154,25 @@
 .back-button:hover {
   background: rgba(0, 0, 0, 0.3);
 }
+
+/* Spaltenauswahl für TableViewer */
+.column-selector {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.column-selector label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.column-selector input[type="checkbox"] {
+  margin-right: 0.3rem;
+  accent-color: #ff5252;
+}
